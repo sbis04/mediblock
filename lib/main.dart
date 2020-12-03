@@ -12,6 +12,7 @@ class MyApp extends StatelessWidget {
       title: 'MediBlock',
       theme: ThemeData(
         primarySwatch: Colors.blue,
+        fontFamily: 'Montserrat',
       ),
       home: LoginPage(),
     );
