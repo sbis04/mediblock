@@ -17,11 +17,7 @@ class _LoginPageState extends State<LoginPage> {
       backgroundColor: CustomColors.dark,
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.only(
-            left: 16.0,
-            right: 16.0,
-            bottom: 20.0,
-          ),
+          padding: const EdgeInsets.only(bottom: 20.0),
           child: Column(
             mainAxisSize: MainAxisSize.max,
             children: [
@@ -31,6 +27,8 @@ class _LoginPageState extends State<LoginPage> {
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    Image.asset('assets/medi_cover.png'),
+                    SizedBox(height: 80),
                     RichText(
                       text: TextSpan(
                         text: 'M',
