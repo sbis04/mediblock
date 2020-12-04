@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mediblock/res/custom_colors.dart';
+import 'package:mediblock/utils/authentication.dart';
+import 'package:mediblock/widgets/logo_widget.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -7,8 +9,6 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  static const double TITLE_TEXT_SIZE = 50;
-
   bool _isLoggingIn = false;
 
   @override
@@ -29,38 +29,7 @@ class _LoginPageState extends State<LoginPage> {
                   children: [
                     Image.asset('assets/medi_cover.png'),
                     SizedBox(height: 80),
-                    RichText(
-                      text: TextSpan(
-                        text: 'M',
-                        style: TextStyle(
-                          color: CustomColors.yellow,
-                          fontSize: TITLE_TEXT_SIZE,
-                        ),
-                        children: [
-                          TextSpan(
-                            text: 'edi',
-                            style: TextStyle(
-                              color: CustomColors.yellow.withOpacity(0.8),
-                              fontSize: TITLE_TEXT_SIZE,
-                            ),
-                          ),
-                          TextSpan(
-                            text: 'B',
-                            style: TextStyle(
-                              color: CustomColors.blue,
-                              fontSize: TITLE_TEXT_SIZE,
-                            ),
-                          ),
-                          TextSpan(
-                            text: 'lock',
-                            style: TextStyle(
-                              color: CustomColors.blue.withOpacity(0.8),
-                              fontSize: TITLE_TEXT_SIZE,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                    LogoWidget(textSize: 50),
                   ],
                 ),
               ),
@@ -83,18 +52,18 @@ class _LoginPageState extends State<LoginPage> {
                             setState(() {
                               _isLoggingIn = true;
                             });
-                            // await signInWithGoogle().then((result) {
-                            //   if (result != null) {
-                            //     Navigator.of(context).pushReplacement(
-                            //       MaterialPageRoute(
-                            //         builder: (context) => NamePage(),
-                            //       ),
-                            //     );
-                            //   }
-                            // }).catchError((e) => print('Google sign in error: $e'));
-                            // setState(() {
-                            //   _isLoggingIn = false;
-                            // });
+                            await signInWithGoogle().then((result) {
+                              if (result != null) {
+                                // Navigator.of(context).pushReplacement(
+                                //   MaterialPageRoute(
+                                //     builder: (context) => NamePage(),
+                                //   ),
+                                // );
+                              }
+                            }).catchError((e) => print('Google sign in error: $e'));
+                            setState(() {
+                              _isLoggingIn = false;
+                            });
                           },
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
