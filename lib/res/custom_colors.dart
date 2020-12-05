@@ -7,4 +7,5 @@ class CustomColors {
   static final Color yellow = Color(0xFFFFB400);
   static final Color blue = Color(0xFF2EC4B6);
   static final Color red = Color(0xFFFF3366);
+  static final Color shade = Color(0xFFD2BBA0);
 }
