@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mediblock/res/custom_colors.dart';
+import 'package:mediblock/screens/name_screen.dart';
 import 'package:mediblock/utils/authentication.dart';
 import 'package:mediblock/widgets/logo_widget.dart';
 
@@ -54,11 +55,11 @@ class _LoginPageState extends State<LoginPage> {
                             });
                             await signInWithGoogle().then((result) {
                               if (result != null) {
-                                // Navigator.of(context).pushReplacement(
-                                //   MaterialPageRoute(
-                                //     builder: (context) => NamePage(),
-                                //   ),
-                                // );
+                                Navigator.of(context).pushReplacement(
+                                  MaterialPageRoute(
+                                    builder: (context) => NamePage(),
+                                  ),
+                                );
                               }
                             }).catchError((e) => print('Google sign in error: $e'));
                             setState(() {
