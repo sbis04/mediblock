@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mediblock/res/custom_colors.dart';
+import 'package:mediblock/screens/dashboard.dart';
 import 'package:mediblock/utils/authentication.dart';
+import 'package:mediblock/utils/database.dart';
 import 'package:mediblock/widgets/logo_widget.dart';
 
 class NamePage extends StatefulWidget {
@@ -9,7 +11,7 @@ class NamePage extends StatefulWidget {
 }
 
 class _NamePageState extends State<NamePage> {
-  // Database database = Database();
+  Database database = Database();
 
   TextEditingController textController;
   FocusNode textFocusNode;
@@ -140,18 +142,20 @@ class _NamePageState extends State<NamePage> {
                                       _isStoring = true;
                                     });
 
-                                    // await database
-                                    //     .storeUserData(userName: textController.text)
-                                    //     .whenComplete(() => Navigator.of(context).pushReplacement(
-                                    //           MaterialPageRoute(
-                                    //             builder: (context) => PresencePage(
-                                    //               userName: textController.text,
-                                    //             ),
-                                    //           ),
-                                    //         ))
-                                    //     .catchError(
-                                    //       (e) => print('Error in storing data: $e'),
-                                    //     );
+                                    await database
+                                        .storeUserData(userName: textController.text)
+                                        .whenComplete(
+                                          () => Navigator.of(context).pushReplacement(
+                                            MaterialPageRoute(
+                                              builder: (context) => DashboardPage(
+                                                userName: textController.text,
+                                              ),
+                                            ),
+                                          ),
+                                        )
+                                        .catchError(
+                                          (e) => print('Error in storing data: $e'),
+                                        );
 
                                     setState(() {
                                       _isStoring = false;
