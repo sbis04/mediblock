@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:mediblock/res/custom_colors.dart';
+import 'package:mediblock/utils/database.dart';
 import 'package:mediblock/utils/file_selector.dart';
 
 class UploadPage extends StatefulWidget {
@@ -16,6 +17,7 @@ class UploadPage extends StatefulWidget {
 
 class _UploadPageState extends State<UploadPage> {
   FileSelector _fileSelector = FileSelector();
+  Database _database = Database();
 
   bool _isUploading = false;
   bool _checkIfValidString = false;
@@ -37,7 +39,7 @@ class _UploadPageState extends State<UploadPage> {
 
     if (_textControllerPassphrase.text != null) {
       if (value.isEmpty) {
-        return 'Name can\'t be empty';
+        return 'Passphrase can\'t be empty';
       }
     }
 
@@ -209,6 +211,9 @@ class _UploadPageState extends State<UploadPage> {
                       //   });
                       // },
                       onSubmitted: (value) {
+                        setState(() {
+                          _validateString(value);
+                        });
                         _textFocusNodePassphrase.unfocus();
                       },
                       style: TextStyle(color: Colors.white),
@@ -286,46 +291,47 @@ class _UploadPageState extends State<UploadPage> {
                     ),
                   ),
                 ),
-                _isUploading
-                    ? Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: CircularProgressIndicator(
-                          valueColor: new AlwaysStoppedAnimation<Color>(
-                            CustomColors.blue,
-                          ),
-                        ),
-                      )
-                    : Container(
-                        width: double.maxFinite,
-                        child: RaisedButton(
-                          color: CustomColors.blue,
-                          onPressed: () async {
+                Container(
+                  width: double.maxFinite,
+                  child: RaisedButton(
+                    color: CustomColors.blue,
+                    onPressed: _isUploading
+                        ? null
+                        : () async {
                             setState(() {
-                              _isUploading = true;
+                              _checkIfValidString = true;
                             });
-                            // upload to firebase
-                            setState(() {
-                              _isUploading = false;
-                            });
+                            if (_validateString(_textControllerPassphrase.text) == null) {
+                              setState(() {
+                                _isUploading = true;
+                              });
+                              await _database.uploadFile(
+                                File(_selectedFile.files.single.path),
+                                _selectedFile.files.single.extension,
+                              );
+                              setState(() {
+                                _isUploading = false;
+                              });
+                            }
                           },
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Padding(
-                            padding: EdgeInsets.only(top: 16.0, bottom: 16.0),
-                            child: Text(
-                              'UPLOAD',
-                              style: TextStyle(
-                                fontFamily: 'Raleway',
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                                letterSpacing: 2,
-                              ),
-                            ),
-                          ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Padding(
+                      padding: EdgeInsets.only(top: 16.0, bottom: 16.0),
+                      child: Text(
+                        'UPLOAD',
+                        style: TextStyle(
+                          fontFamily: 'Raleway',
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: _isUploading ? Colors.white54 : Colors.white,
+                          letterSpacing: 2,
                         ),
                       ),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
