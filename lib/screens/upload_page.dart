@@ -190,93 +190,100 @@ class _UploadPageState extends State<UploadPage> {
                           ),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextField(
-                    controller: _textControllerPassphrase,
-                    focusNode: _textFocusNodePassphrase,
-                    keyboardType: TextInputType.text,
-                    textInputAction: TextInputAction.done,
-                    obscureText: true,
-                    cursorColor: CustomColors.blue,
-                    autofocus: false,
-                    // onChanged: (value) {
-                    //   setState(() {
-                    //     _passphrase = value;
-                    //   });
-                    // },
-                    onSubmitted: (value) {
-                      _textFocusNodePassphrase.unfocus();
-                    },
-                    style: TextStyle(color: Colors.white),
-                    textCapitalization: TextCapitalization.sentences,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(
-                          color: CustomColors.blue,
-                          width: 3,
+                Visibility(
+                  visible: _selectedFile != null,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 30.0),
+                    child: TextField(
+                      enabled: !_isUploading,
+                      controller: _textControllerPassphrase,
+                      focusNode: _textFocusNodePassphrase,
+                      keyboardType: TextInputType.text,
+                      textInputAction: TextInputAction.done,
+                      obscureText: true,
+                      cursorColor: CustomColors.blue,
+                      autofocus: false,
+                      // onChanged: (value) {
+                      //   setState(() {
+                      //     _passphrase = value;
+                      //   });
+                      // },
+                      onSubmitted: (value) {
+                        _textFocusNodePassphrase.unfocus();
+                      },
+                      style: TextStyle(color: Colors.white),
+                      textCapitalization: TextCapitalization.sentences,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide(
+                            color: CustomColors.blue,
+                            width: 3,
+                          ),
                         ),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(
-                          color: CustomColors.blue.withOpacity(0.5),
-                          width: 3,
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide(
+                            color: CustomColors.blue.withOpacity(0.5),
+                            width: 3,
+                          ),
                         ),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(
-                          color: CustomColors.blue,
-                          width: 3,
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide(
+                            color: CustomColors.blue,
+                            width: 3,
+                          ),
                         ),
-                      ),
-                      filled: true,
-                      hintStyle: TextStyle(
-                        color: Colors.white70,
-                      ),
-                      hintText: "Type your passphase",
-                      fillColor: Colors.white10,
-                      errorText: _checkIfValidString
-                          ? _validateString(_textControllerPassphrase.text)
-                          : null,
-                      errorStyle: TextStyle(
-                        fontSize: 12,
-                        color: Colors.redAccent,
+                        filled: true,
+                        hintStyle: TextStyle(
+                          color: Colors.white70,
+                        ),
+                        hintText: "Type your passphase",
+                        fillColor: Colors.white10,
+                        errorText: _checkIfValidString
+                            ? _validateString(_textControllerPassphrase.text)
+                            : null,
+                        errorStyle: TextStyle(
+                          fontSize: 12,
+                          color: Colors.redAccent,
+                        ),
                       ),
                     ),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                    top: 20.0,
-                    bottom: 30.0,
-                    left: 8.0,
-                    right: 8.0,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      LinearProgressIndicator(
-                        backgroundColor: Colors.white12,
-                        // the value of the progress (b/t: 0.0 - 1.0),
-                        // setting to null turns to infinite
-                        value: null,
-                        valueColor: new AlwaysStoppedAnimation<Color>(
-                          CustomColors.blue,
+                Visibility(
+                  visible: _isUploading,
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                      top: 0.0,
+                      bottom: 30.0,
+                      left: 8.0,
+                      right: 8.0,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        LinearProgressIndicator(
+                          backgroundColor: Colors.white12,
+                          // the value of the progress (b/t: 0.0 - 1.0),
+                          // setting to null turns to infinite
+                          value: null,
+                          valueColor: new AlwaysStoppedAnimation<Color>(
+                            CustomColors.blue,
+                          ),
                         ),
-                      ),
-                      SizedBox(height: 8.0),
-                      Text(
-                        '${_uploadProgressPhases[1]} . . .',
-                        style: TextStyle(
-                          color: CustomColors.blue,
-                          letterSpacing: 2,
-                          fontSize: 14.0,
-                        ),
-                      )
-                    ],
+                        SizedBox(height: 8.0),
+                        Text(
+                          '${_uploadProgressPhases[1]} . . .',
+                          style: TextStyle(
+                            color: CustomColors.blue,
+                            letterSpacing: 2,
+                            fontSize: 14.0,
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                 ),
                 _isUploading
