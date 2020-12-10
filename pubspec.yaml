@@ -33,6 +33,7 @@ dependencies:
   google_sign_in: ^4.5.6
   cloud_firestore: ^0.14.4
   shared_preferences: ^0.5.12+4
+  file_picker: ^2.1.1
 
 dev_dependencies:
   flutter_test:
