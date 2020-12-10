@@ -25,7 +25,7 @@ class _UploadPageState extends State<UploadPage> {
     'loading file',
     'encrypting file',
     'uploading to blockchain',
-    'uploading to database',
+    'uploading file',
     'finalizing',
   ];
 
