@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:mediblock/model/block_file.dart';
 import 'package:mediblock/model/user.dart';
 import 'package:mediblock/utils/authentication.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -36,5 +37,41 @@ class Database {
         .snapshots();
 
     return queryUsers;
+  }
+
+  addFileData({
+    String fileNameEncrypted,
+    String fileURL,
+    String fileName,
+    List<String> txHashes,
+  }) async {
+    // fileNameEncrypted -> time used for firebase upload
+    // fileName -> normal name while uplaod
+    DocumentReference documentReferencer =
+        userCollection.doc(uid).collection('files').doc(fileNameEncrypted);
+
+    BlockFile blockFile = BlockFile(
+      nameEncrypted: fileNameEncrypted,
+      name: fileName,
+      url: fileURL,
+      txHashes: txHashes,
+    );
+
+    var data = blockFile.toJson();
+
+    await documentReferencer.set(data).whenComplete(() {
+      print("File data added");
+    }).catchError((e) => print(e));
+  }
+
+  Stream<QuerySnapshot> retriveFiles() {
+    Stream<QuerySnapshot> queryFiles = userCollection
+        // .where('uid', isNotEqualTo: uid)
+        // .orderBy('last_seen', descending: true)
+        .doc(uid)
+        .collection('files')
+        .snapshots();
+
+    return queryFiles;
   }
 }
