@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:mediblock/model/user.dart';
 import 'package:mediblock/utils/authentication.dart';
@@ -29,7 +32,7 @@ class Database {
   Stream<QuerySnapshot> retrieveUsers() {
     Stream<QuerySnapshot> queryUsers = userCollection
         // .where('uid', isNotEqualTo: uid)
-        .orderBy('last_seen', descending: true)
+        // .orderBy('last_seen', descending: true)
         .snapshots();
 
     return queryUsers;
