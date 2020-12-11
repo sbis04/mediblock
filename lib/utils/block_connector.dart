@@ -113,7 +113,7 @@ class BlockConnector {
     // setState(() {
     //   retrievingTx = true;
     // });
-    information = await etherClient.getTransactionByHash(txhash);
+    information = await etherClient?.getTransactionByHash(txhash);
     // setState(() {});
 
     // print('----------------');
@@ -127,7 +127,7 @@ class BlockConnector {
       // print('Data: ${information.input ?? ''}, ');
       // print('Gas limit: ${information.gas} wei');
 
-      getTransactionReceipt(txhash);
+      // getTransactionReceipt(txhash);
     }
     // setState(() {
     //   retrievingTx = false;
