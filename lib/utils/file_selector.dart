@@ -10,6 +10,9 @@ class FileSelector {
       allowedExtensions: ['pdf', 'doc', 'txt'],
     );
 
+    // for converting to bytes for encryption (TODO)
+    // print(await File(result.files.single.path).readAsBytes());
+
     // if (result != null) {
     //   file = File(result.files.single.path);
 
