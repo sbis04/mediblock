@@ -50,6 +50,9 @@ class _UploadPageState extends State<UploadPage> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+        setState(() {
+          _validateString(_textControllerPassphrase.text);
+        });
         _textFocusNodePassphrase.unfocus();
       },
       child: Scaffold(
