@@ -1,10 +1,15 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:mediblock/model/address.dart';
 import 'package:mediblock/res/custom_colors.dart';
-import 'package:mediblock/utils/database.dart';
+import 'package:mediblock/sample/sample_data.dart';
+import 'package:mediblock/utils/block_connector.dart';
 import 'package:mediblock/utils/file_selector.dart';
+import 'package:web3dart/web3dart.dart';
 
 class UploadPage extends StatefulWidget {
   final String userName;
@@ -16,11 +21,13 @@ class UploadPage extends StatefulWidget {
 }
 
 class _UploadPageState extends State<UploadPage> {
-  FileSelector _fileSelector = FileSelector();
-  Database _database = Database();
+  final FileSelector _fileSelector = FileSelector();
+  final BlockConnector blockConnector = BlockConnector();
+  final Reference _storageReference = FirebaseStorage.instance.ref();
 
   bool _isUploading = false;
   bool _checkIfValidString = false;
+
   FilePickerResult _selectedFile;
 
   List<String> _uploadProgressPhases = [
@@ -30,6 +37,23 @@ class _UploadPageState extends State<UploadPage> {
     'uploading file',
     'finalizing',
   ];
+
+  int _currentUploadProgressPhase = 0;
+
+  double _fileUploadProgressFraction = 0.0;
+
+  int totalTx = 0;
+  int currentTx = 0;
+  int processedTx = 0;
+
+  int totalDataToRetrieve = 0;
+  int totalDataProcessed = 0;
+
+  bool retrievingTx = false;
+  bool processingTx = false;
+
+  List<String> hashList = [];
+  String jsonAddress;
 
   TextEditingController _textControllerPassphrase = TextEditingController();
   FocusNode _textFocusNodePassphrase = FocusNode();
@@ -44,6 +68,159 @@ class _UploadPageState extends State<UploadPage> {
     }
 
     return null;
+  }
+
+  Future<void> _processTransaction(List<BigInt> matrixData) async {
+    const int TX_SIZE = 400;
+    final int totalMatrixLength = matrixData.length;
+
+    setState(() {
+      totalTx = totalMatrixLength ~/ TX_SIZE;
+    });
+
+    if (totalMatrixLength % TX_SIZE != 0) totalTx++;
+
+    currentTx = 0;
+    processedTx = 0;
+
+    String txHash;
+
+    int start = 0;
+    int end = TX_SIZE;
+
+    hashList.clear();
+
+    setState(() {
+      processingTx = true;
+    });
+
+    while (processedTx != totalTx) {
+      if (processedTx == currentTx) {
+        currentTx++;
+        List<BigInt> listSegment = matrixData.sublist(start, end);
+        print('start: $start, end: $end, list: $listSegment');
+        txHash = await blockConnector.sendData(listSegment);
+        hashList.add(txHash);
+      }
+
+      await Future.delayed(Duration(seconds: 1));
+
+      TransactionReceipt receipt = await blockConnector.getTransactionReceipt(txHash);
+      if (receipt != null) {
+        print('Trnx hash: ${blockConnector.information.hash}, ');
+        print('Receipt: Cumulitive gas used: ${receipt.cumulativeGasUsed} wei, ');
+        print('Receipt: Gas used: ${receipt.gasUsed} wei, ');
+        print('Receipt: Status: ${receipt.status}');
+
+        setState(() {
+          processedTx++;
+        });
+
+        start += TX_SIZE;
+        end += TX_SIZE;
+      }
+
+      print('Transactions: $processedTx/$totalTx, currently processing: $currentTx');
+    }
+    setState(() {
+      processingTx = false;
+    });
+
+    blockConnector.getWalletBalance();
+
+    Address address = Address(
+      hashes: hashList,
+      count: hashList.length,
+      length: TX_SIZE,
+    );
+
+    jsonAddress = jsonEncode(address);
+
+    // Writing the addresses to a file for testing
+    // final result = File('address/address.json').openWrite(mode: FileMode.write);
+    // result.write(JsonEncoder.withIndent('  ').convert(jsonAddress));
+    // await result.close();
+
+    // setState(() {
+    //   hashListTextController.text = jsonAddress;
+    // });
+
+    setState(() {});
+
+    print('JSON: $jsonAddress');
+
+    print('--------------');
+    print('TxHASH LIST:');
+    print(hashList);
+  }
+
+  Future<List<int>> _retrieveData() async {
+    // here goes the firebase stored map
+    // in form of the model structure
+    // of Address
+    Map<String, dynamic> decodedJson = jsonDecode(jsonAddress);
+
+    // Address address = Address.fromJson(decodedJson);
+
+    List<int> fullData = [];
+
+    List<dynamic> hashList = decodedJson['hash'];
+
+    setState(() {
+      totalDataToRetrieve = hashList.length;
+      totalDataProcessed = 0;
+    });
+
+    for (String hash in hashList) {
+      TransactionInformation txInfo = await blockConnector.getTransactionDetails(hash);
+      List<int> cleanedData = blockConnector.sanitizeData(txInfo.input);
+      fullData.addAll(cleanedData);
+      totalDataProcessed++;
+    }
+
+    return fullData;
+  }
+
+  Future<String> uploadFile(File document, String format) async {
+    Reference ref = _storageReference.child('files/');
+
+    String currentTimeString = DateTime.now().millisecondsSinceEpoch.toString();
+
+    final UploadTask storageUploadTask = ref.child('$currentTimeString.$format').putFile(document);
+
+    storageUploadTask.snapshotEvents.listen((TaskSnapshot snapshot) {
+      setState(() {
+        _fileUploadProgressFraction = snapshot.bytesTransferred / snapshot.totalBytes;
+      });
+
+      print('Task state: ${snapshot.state}');
+      print('Progress: ${_fileUploadProgressFraction * 100} %');
+    }, onError: (e) {
+      // The final snapshot is also available on the task via `.snapshot`,
+      // this can include 2 additional states, `TaskState.error` & `TaskState.canceled`
+      print(storageUploadTask.snapshot);
+
+      if (e.code == 'permission-denied') {
+        print('User does not have permission to upload to this reference.');
+      }
+    });
+
+    // We can still optionally use the Future alongside the stream.
+    try {
+      await storageUploadTask;
+      print('Upload complete.');
+    } on FirebaseException catch (e) {
+      if (e.code == 'permission-denied') {
+        print('User does not have permission to upload to this reference.');
+      }
+    }
+
+    final TaskSnapshot downloadUrl = await storageUploadTask;
+
+    final String url = (await downloadUrl.ref.getDownloadURL());
+
+    print("File URL " + url);
+    return url;
   }
 
   @override
@@ -276,14 +453,16 @@ class _UploadPageState extends State<UploadPage> {
                           backgroundColor: Colors.white12,
                           // the value of the progress (b/t: 0.0 - 1.0),
                           // setting to null turns to infinite
-                          value: null,
+                          value: (_fileUploadProgressFraction +
+                                  (totalTx == 0 ? 0 : processedTx / totalTx)) /
+                              2,
                           valueColor: new AlwaysStoppedAnimation<Color>(
                             CustomColors.blue,
                           ),
                         ),
                         SizedBox(height: 8.0),
                         Text(
-                          '${_uploadProgressPhases[1]} . . .',
+                          '${_uploadProgressPhases[_currentUploadProgressPhase]} (${((_fileUploadProgressFraction + (totalTx == 0 ? 0 : processedTx / totalTx)) / 2) * 100}%) . . .',
                           style: TextStyle(
                             color: CustomColors.blue,
                             letterSpacing: 2,
@@ -302,17 +481,27 @@ class _UploadPageState extends State<UploadPage> {
                         ? null
                         : () async {
                             setState(() {
+                              _currentUploadProgressPhase = 0;
                               _checkIfValidString = true;
                             });
                             if (_validateString(_textControllerPassphrase.text) == null) {
+                              blockConnector.initializeClient();
                               setState(() {
                                 _isUploading = true;
+                                _currentUploadProgressPhase = 2;
                               });
-                              await _database.uploadFile(
+                              blockConnector.initializeClient();
+                              await _processTransaction(SampleData.sampleMatrix);
+                              setState(() {
+                                _isUploading = true;
+                                _currentUploadProgressPhase = 3;
+                              });
+                              await uploadFile(
                                 File(_selectedFile.files.single.path),
                                 _selectedFile.files.single.extension,
                               );
                               setState(() {
+                                _currentUploadProgressPhase = 4;
                                 _isUploading = false;
                               });
                             }
