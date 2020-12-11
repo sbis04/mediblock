@@ -8,6 +8,7 @@ import 'package:mediblock/model/address.dart';
 import 'package:mediblock/res/custom_colors.dart';
 import 'package:mediblock/sample/sample_data.dart';
 import 'package:mediblock/utils/block_connector.dart';
+import 'package:mediblock/utils/database.dart';
 import 'package:mediblock/utils/file_selector.dart';
 import 'package:web3dart/web3dart.dart';
 
@@ -21,12 +22,14 @@ class UploadPage extends StatefulWidget {
 }
 
 class _UploadPageState extends State<UploadPage> {
+  final Database _database = Database();
   final FileSelector _fileSelector = FileSelector();
   final BlockConnector blockConnector = BlockConnector();
   final Reference _storageReference = FirebaseStorage.instance.ref();
 
   bool _isUploading = false;
   bool _checkIfValidString = false;
+  String currentTimeString;
 
   FilePickerResult _selectedFile;
 
@@ -103,11 +106,11 @@ class _UploadPageState extends State<UploadPage> {
         hashList.add(txHash);
       }
 
-      await Future.delayed(Duration(seconds: 1));
+      await Future.delayed(Duration(seconds: 6));
 
       TransactionReceipt receipt = await blockConnector.getTransactionReceipt(txHash);
       if (receipt != null) {
-        print('Trnx hash: ${blockConnector.information.hash}, ');
+        // print('Trnx hash: ${blockConnector.information.hash}, ');
         print('Receipt: Cumulitive gas used: ${receipt.cumulativeGasUsed} wei, ');
         print('Receipt: Gas used: ${receipt.gasUsed} wei, ');
         print('Receipt: Status: ${receipt.status}');
@@ -184,7 +187,9 @@ class _UploadPageState extends State<UploadPage> {
   Future<String> uploadFile(File document, String format) async {
     Reference ref = _storageReference.child('files/');
 
-    String currentTimeString = DateTime.now().millisecondsSinceEpoch.toString();
+    setState(() {
+      currentTimeString = DateTime.now().millisecondsSinceEpoch.toString();
+    });
 
     final UploadTask storageUploadTask = ref.child('$currentTimeString.$format').putFile(document);
 
@@ -462,7 +467,7 @@ class _UploadPageState extends State<UploadPage> {
                         ),
                         SizedBox(height: 8.0),
                         Text(
-                          '${_uploadProgressPhases[_currentUploadProgressPhase]} (${((_fileUploadProgressFraction + (totalTx == 0 ? 0 : processedTx / totalTx)) / 2) * 100}%) . . .',
+                          '${_uploadProgressPhases[_currentUploadProgressPhase]} (${(((_fileUploadProgressFraction + (totalTx == 0 ? 0 : processedTx / totalTx)) / 2) * 100).toStringAsFixed(0)}%) . . .',
                           style: TextStyle(
                             color: CustomColors.blue,
                             letterSpacing: 2,
@@ -496,7 +501,7 @@ class _UploadPageState extends State<UploadPage> {
                                 _isUploading = true;
                                 _currentUploadProgressPhase = 3;
                               });
-                              await uploadFile(
+                              String fileURL = await uploadFile(
                                 File(_selectedFile.files.single.path),
                                 _selectedFile.files.single.extension,
                               );
@@ -504,6 +509,12 @@ class _UploadPageState extends State<UploadPage> {
                                 _currentUploadProgressPhase = 4;
                                 _isUploading = false;
                               });
+                              await _database.addFileData(
+                                fileNameEncrypted: currentTimeString,
+                                fileName: _selectedFile.files.single.name,
+                                fileURL: fileURL,
+                                txHashes: hashList,
+                              );
                             }
                           },
                     shape: RoundedRectangleBorder(
