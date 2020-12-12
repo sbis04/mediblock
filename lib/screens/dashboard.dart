@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mediblock/model/user.dart';
 import 'package:mediblock/res/custom_colors.dart';
+import 'package:mediblock/screens/files_page.dart';
 import 'package:mediblock/screens/upload_page.dart';
 import 'package:mediblock/utils/database.dart';
 import 'package:mediblock/widgets/logo_widget.dart';
@@ -80,7 +81,13 @@ class _DashboardPageState extends State<DashboardPage> {
                       ),
                     ),
                     RaisedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => FilesPage(),
+                          ),
+                        );
+                      },
                       color: CustomColors.shade,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
