@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mediblock/model/block_file.dart';
 import 'package:mediblock/res/custom_colors.dart';
+import 'package:mediblock/utils/authentication.dart';
 import 'package:mediblock/utils/database.dart';
 
 class FilesPage extends StatefulWidget {
@@ -35,7 +36,7 @@ class _FilesPageState extends State<FilesPage> {
             right: 16.0,
           ),
           child: StreamBuilder(
-            stream: _database.retriveFiles(),
+            stream: _database.retriveFiles(userID: uid),
             builder: (_, snapshot) {
               if (snapshot.hasData) {
                 return ListView.separated(

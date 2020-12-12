@@ -64,11 +64,11 @@ class Database {
     }).catchError((e) => print(e));
   }
 
-  Stream<QuerySnapshot> retriveFiles() {
+  Stream<QuerySnapshot> retriveFiles({@required String userID}) {
     Stream<QuerySnapshot> queryFiles = userCollection
         // .where('uid', isNotEqualTo: uid)
         // .orderBy('last_seen', descending: true)
-        .doc(uid)
+        .doc(userID)
         .collection('files')
         .snapshots();
 
