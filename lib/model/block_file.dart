@@ -4,7 +4,7 @@ class BlockFile {
   String nameEncrypted;
   String name;
   String url;
-  List<String> txHashes;
+  List<dynamic> txHashes;
 
   BlockFile({
     @required this.nameEncrypted,
