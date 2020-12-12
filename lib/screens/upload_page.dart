@@ -262,11 +262,15 @@ class _UploadPageState extends State<UploadPage> {
                   children: [
                     Text(
                       'uploader: ',
-                      style: TextStyle(color: CustomColors.yellow, fontSize: 18),
+                      style: TextStyle(
+                        color: CustomColors.yellow,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                     Text(
                       '${widget.userName}',
-                      style: TextStyle(color: Colors.white, fontSize: 18),
+                      style: TextStyle(color: Colors.white, fontSize: 18, letterSpacing: 1.4),
                     ),
                   ],
                 ),
