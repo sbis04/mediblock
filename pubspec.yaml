@@ -36,6 +36,10 @@ dependencies:
   file_picker: ^2.1.1
   web3dart: ^2.0.0-dev.7
   http: ^0.12.2
+  path_provider: ^1.6.24
+  flutter_downloader: ^1.5.2
+  permission_handler: ^5.0.1+1
+  open_file: ^3.0.3
 
 dev_dependencies:
   flutter_test:
