@@ -179,6 +179,11 @@ class _NamePageState extends State<NamePage> {
                           ),
                         ),
                       ),
+                SizedBox(height: 10.0),
+                Text(
+                  '* The name that you enter here, will be shared for the ease of identification',
+                  style: TextStyle(color: Colors.white60, fontSize: 12.0, letterSpacing: 1.4),
+                )
               ],
             ),
           ),
