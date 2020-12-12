@@ -85,6 +85,14 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                     ),
+              SizedBox(height: 10.0),
+              Padding(
+                padding: const EdgeInsets.only(top: 8.0, left: 16.0, right: 16.0),
+                child: Text(
+                  '* Uses Google Sign In for authentication (none of the user identifiable information is stored on the backend)',
+                  style: TextStyle(color: Colors.white60, fontSize: 12.0, letterSpacing: 1.4),
+                ),
+              )
             ],
           ),
         ),
