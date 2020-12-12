@@ -14,6 +14,7 @@ class LogoWidget extends StatelessWidget {
         style: TextStyle(
           color: CustomColors.yellow,
           fontSize: textSize,
+          fontWeight: FontWeight.w600,
         ),
         children: [
           TextSpan(

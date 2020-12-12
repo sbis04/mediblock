@@ -247,6 +247,7 @@ class _UploadPageState extends State<UploadPage> {
             style: TextStyle(
               color: CustomColors.blue,
               fontSize: 26,
+              fontWeight: FontWeight.w600,
             ),
           ),
         ),
@@ -362,6 +363,7 @@ class _UploadPageState extends State<UploadPage> {
                                       style: TextStyle(
                                         fontSize: 32.0,
                                         color: CustomColors.shade.withOpacity(0.8),
+                                        fontWeight: FontWeight.w600,
                                       ),
                                     ),
                                     SizedBox(height: 30.0),
