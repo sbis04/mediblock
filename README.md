@@ -8,7 +8,7 @@ With more data being pushed to external cloud storage, privacy concerns are usua
 
 The scheme used was developed as a part of a research project under Dr. [S.K. Hafizul Islam](https://scholar.google.com/citations?user=ip3ClBIAAAAJ&hl=en&oi=ao) and Dr. [Sherali Zeadally](http://www.uky.edu/~sze223/).
 
-![](https://github.com/sbis04/mediblock/raw/master/screenshots/paper_top.png)
+![](https://github.com/sbis04/mediblock/raw/master/screenshots/paper_title.png)
 
 The scheme we developed has the following properties:
 
