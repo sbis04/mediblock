@@ -37,7 +37,6 @@ dependencies:
   web3dart: ^2.0.0-dev.7
   http: ^0.12.2
   path_provider: ^1.6.24
-  flutter_downloader: ^1.5.2
   permission_handler: ^5.0.1+1
   open_file: ^3.0.3
 
@@ -77,7 +76,7 @@ flutter:
         - asset: fonts/Montserrat-SemiBold.ttf
           weight: 600
         - asset: fonts/Montserrat-Regular.ttf
-          weight: 400  
+          weight: 400
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic
   #   - family: Trajan Pro

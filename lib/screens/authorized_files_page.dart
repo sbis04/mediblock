@@ -1,14 +1,9 @@
-import 'dart:convert';
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:mediblock/model/block_file.dart';
 import 'package:mediblock/res/custom_colors.dart';
 import 'package:mediblock/utils/block_connector.dart';
 import 'package:mediblock/utils/database.dart';
 import 'package:open_file/open_file.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:web3dart/web3dart.dart';
 
