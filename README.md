@@ -6,8 +6,12 @@ An app for sharing electronic health records (EHRs) securely using Blockchain ba
 
 - Flutter
 - Dart
-- C++11
 - Firebase
+- Google Sign In
+- Solidity (ethereum smart contract)
+- Rinkeby
+- Infura
+- C++11
 
 ## The problem
 
