@@ -34,6 +34,8 @@ The scheme has the following participants:
 
 ![](https://github.com/sbis04/mediblock/raw/master/screenshots/system_model.png)
 
+![](https://github.com/sbis04/mediblock/raw/master/screenshots/mediblock_interfacing.png)
+
 ## Wireframe (with some description)
 
 ![](https://github.com/sbis04/mediblock/raw/master/screenshots/mediblock_wireframe.png)
