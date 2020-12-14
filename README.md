@@ -56,6 +56,21 @@ The scheme has the following participants:
 
 ![](https://github.com/sbis04/mediblock/raw/master/screenshots/mediblock_planning.jpg)
 
+## Plugins
+
+- [firebase_core](https://pub.dev/packages/firebase_core)
+- [firebase_auth](https://pub.dev/packages/firebase_auth)
+- [google_sign_in](https://pub.dev/packages/google_sign_in)
+- [cloud_firestore](https://pub.dev/packages/cloud_firestore)
+- [firebase_storage](https://pub.dev/packages/firebase_storage)
+- [shared_preferences](https://pub.dev/packages/shared_preferences)
+- [file_picker](https://pub.dev/packages/file_picker)
+- [web3dart](https://pub.dev/packages/web3dart)
+- [http](https://pub.dev/packages/http)
+- [path_provider](https://pub.dev/packages/path_provider)
+- [permission_handler](https://pub.dev/packages/permission_handler)
+- [open_file](https://pub.dev/packages/open_file)
+
 ## License
 
 Copyright (c) 2020 Bharat Keswani, Nimish Mishra, Souvik Biswas
