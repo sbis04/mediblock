@@ -1,5 +1,7 @@
 # MediBlock
 
+> [Video demo of the app in action](https://youtu.be/vSe-I6875dU)
+
 An app for sharing electronic health records (EHRs) securely using Blockchain based searchable-encryption scheme.
 
 ## Technology stack
