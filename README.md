@@ -9,6 +9,7 @@ An app for sharing electronic health records (EHRs) securely using Blockchain ba
 - Firebase
 - Google Sign In
 - Solidity (ethereum smart contract)
+- Metamask
 - Rinkeby
 - Infura
 - C++11
