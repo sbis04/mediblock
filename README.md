@@ -4,6 +4,18 @@
 
 An app for sharing electronic health records (EHRs) securely using Blockchain based searchable-encryption scheme.
 
+## Key features
+
+- Uses a **custom encryption** scheme designed by us (based upon multiple research proven concepts - `scroll down to know more`)
+
+- Immune against **quantum attacks**
+
+- **Minimal transaction cost** and low data retrieval/storage time
+
+- Easy to use and **simple app UI** (having all the highly complicated computation stuff in the backend)
+
+> **POINT TO NOTE:** We don't upload the `file` to blockchain, rather just some `data` required for the encryption (keeping the transaction cost low and requires minimal time for retrieving/storing data to blockchain).
+
 ## Technology stack
 
 - Flutter
