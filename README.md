@@ -14,7 +14,7 @@ An app for sharing electronic health records (EHRs) securely using Blockchain ba
 
 - Easy to use and **simple app UI** (having all the highly complicated computation stuff in the backend)
 
-> **POINT TO NOTE:** We don't upload the `file` to blockchain, rather just some `data` required for the encryption (keeping the transaction cost low and requires minimal time for retrieving/storing data to blockchain).
+> **POINT TO NOTE:** We don't upload the `file` to blockchain, rather just store some `data` required for the encryption (keeping the transaction cost low and requires minimal time for retrieving/storing data to blockchain).
 
 ## Technology stack
 
